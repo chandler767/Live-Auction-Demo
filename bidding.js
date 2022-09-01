@@ -130,7 +130,7 @@ class auctionItemControl { // Formats messages and scrolls into view.
                     <h6 class="card-subtitle mb-2 text-${side}"><small>Posted on: ${timedisplay}</small></h6>
                     <h6 class="card-subtitle mb-2 text-${side}"><small>Offers Shipping: ${new_msg.shipping}</small></h6>
                     <p class="card-text text-${side}">${new_msg.description}</p>
-                    <div class="alert alert-warning hidden" id="win-${new_msg.bidding_channel}" role="alert">
+                    <div class="alert alert-warning" id="win-${new_msg.bidding_channel}" role="alert">
                         <h2 class="card-subtitle mb-2 text-${side}">You won this item!</h2>
                         <h4 class="card-subtitle mb-2 text-${side}"><small>Collection Details: ${new_msg.collect_details}</small></h6>
                     </div>
@@ -166,6 +166,8 @@ class auctionItemControl { // Formats messages and scrolls into view.
 
             var new_time = ${new_msg.end_time};
 
+            document.getElementById("win-${new_msg.bidding_channel}").style.visibility = 'hidden';
+
             document.getElementById("countdown-${new_msg.bidding_channel}").innerHTML = "loading...";
 
             // Set the date we're counting down to
@@ -198,15 +200,25 @@ class auctionItemControl { // Formats messages and scrolls into view.
                             document.getElementById("countdown-${new_msg.bidding_channel}").innerHTML = "Auction Has Ended";
                             document.getElementById("${new_msg.bidding_channel}-accordionBid").style.visibility = 'hidden';
                             // Get last Bid
-                         
+                            pubnub.fetchMessages(
+                            {
+                                channels: ['${new_msg.bidding_channel}'],
+                                count: 1
+                            },
+                            function (status, response) {
+                                if (response.channels[encodeURIComponent('${new_msg.bidding_channel}')] && encodeURIComponent('${new_msg.bidding_channel}') in response.channels) {
+                                    response.channels[encodeURIComponent('${new_msg.bidding_channel}')].forEach((message) => {
+                                        if (message.uuid == pubnub.getUUID()) { // you won the bid!!
+                                            document.getElementById('win-${new_msg.bidding_channel}').style.visibility = 'visible';
+                                        }
+                                    });
+                                }
+                            });
                         }
                     }
                 } else {
                     clearInterval(x);
-                }
-
-                    
-                
+                }   
             }, 1000);
 
    function placeBid${new_msg.bidding_channel} () {
