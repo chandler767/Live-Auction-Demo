@@ -109,7 +109,7 @@ class auctionItemControl { // Formats messages and scrolls into view.
             new_msg.bidding_channel = "TestItemName"+new Date().getTime()+ 3650000;
         }
         if (new_msg.image == undefined) {
-            new_msg.image = "/Live-Auction-Demo/images/lamp.png";
+            new_msg.image = "/images/lamp.png";
         }
         if (new_msg.shipping == undefined) {
             new_msg.shipping = "Yes";
@@ -130,7 +130,7 @@ class auctionItemControl { // Formats messages and scrolls into view.
                     <h6 class="card-subtitle mb-2 text-${side}"><small>Posted on: ${timedisplay}</small></h6>
                     <h6 class="card-subtitle mb-2 text-${side}"><small>Offers Shipping: ${new_msg.shipping}</small></h6>
                     <p class="card-text text-${side}">${new_msg.description}</p>
-                    <div class="alert alert-warning hidden" id="win-${new_msg.bidding_channel}" role="alert">
+                    <div class="alert alert-warning" id="win-${new_msg.bidding_channel}" role="alert">
                         <h2 class="card-subtitle mb-2 text-${side}">You won this item!</h2>
                         <h4 class="card-subtitle mb-2 text-${side}"><small>Collection Details: ${new_msg.collect_details}</small></h6>
                     </div>
@@ -147,7 +147,7 @@ class auctionItemControl { // Formats messages and scrolls into view.
                                     <div class="accordion-body text-dark">
                                         <strong>Read Carefully:</strong> By placing a bid you are making an agreement with the seller to pay for your item. You must work with the seller directly to pay for the item and arrange for shipping or pickup. You will get contact details if you place the winning bid. 
                                         <br>
-                                        <br
+                                        <br>
                                         <form>
                                             <div class="mb-3">
                                                 <h5><label for="submitBid" class="form-label">Your Bid:</label></h5>
@@ -167,6 +167,8 @@ class auctionItemControl { // Formats messages and scrolls into view.
             var new_time = ${new_msg.end_time};
 
             document.getElementById("countdown-${new_msg.bidding_channel}").innerHTML = "loading...";
+            document.getElementById('win-${new_msg.bidding_channel}').style.visibility = 'hidden';
+
 
             // Set the date we're counting down to
             var countDownDate${new_msg.bidding_channel} = new Date(new_time).getTime();
@@ -193,26 +195,24 @@ class auctionItemControl { // Formats messages and scrolls into view.
 
                     // If the count down is finished, write some text
                     if (distance < 0) {
-                        if (document.getElementById("countdown-${new_msg.bidding_channel}").innerHTML != "Auction Has Ended") {
-                            clearInterval(x);
-                            document.getElementById("countdown-${new_msg.bidding_channel}").innerHTML = "Auction Has Ended";
-                            document.getElementById("${new_msg.bidding_channel}-accordionBid").style.visibility = 'hidden';
-                            // Get last Bid
-                            pubnub.fetchMessages(
-                            {
-                                channels: ['${new_msg.bidding_channel}'],
-                                count: 1
-                            },
-                            function (status, response) {
-                                if (response.channels[encodeURIComponent('${new_msg.bidding_channel}')] && encodeURIComponent('${new_msg.bidding_channel}') in response.channels) {
-                                    response.channels[encodeURIComponent('${new_msg.bidding_channel}')].forEach((message) => {
-                                        if (message.uuid == pubnub.getUUID()) { // you won the bid!!
-                                            document.getElementById('win-${new_msg.bidding_channel}').style.visibility = 'visible';
-                                        }
-                                    });
-                                }
-                            });
-                        }
+                        clearInterval(x);
+                        document.getElementById("countdown-${new_msg.bidding_channel}").innerHTML = "Auction Has Ended";
+                        document.getElementById("${new_msg.bidding_channel}-accordionBid").style.visibility = 'hidden';
+                        // Get last Bid
+                        pubnub.fetchMessages(
+                        {
+                            channels: ['${new_msg.bidding_channel}'],
+                            count: 1
+                        },
+                        function (status, response) {
+                            if (response.channels[encodeURIComponent('${new_msg.bidding_channel}')] && encodeURIComponent('${new_msg.bidding_channel}') in response.channels) {
+                                response.channels[encodeURIComponent('${new_msg.bidding_channel}')].forEach((message) => {
+                                    if (message.uuid == pubnub.getUUID()) { // you won the bid!!
+                                        document.getElementById('win-${new_msg.bidding_channel}').style.visibility = 'visible';
+                                    }
+                                });
+                            }
+                        });
                     }
                 } else {
                     clearInterval(x);
@@ -381,7 +381,7 @@ function setActive(e) {
         name: document.getElementById('nameInput').value,
         description: document.getElementById('desInput').value,
         //image: document.getElementById('imageInput').value,
-        image: "/Live-Auction-Demo/images/lamp.png",
+        image: "/images/lamp.png",
         collect_details: document.getElementById('contactInput').value,
         shipping: will_ship,
         end_time: set_end_time,
@@ -492,20 +492,4 @@ const updateUI = async () => {
         sub = userdetails.sub;
         loadBidding("your-bids");
     }
-   
-    
-   /* document.getElementById("btn-logout").disabled = !isAuthenticated
-    document.getElementById("btn-login").disabled = isAuthenticated
-    // NEW - add logic to show/hide gated content after authentication
-    if (isAuthenticated) {
-      document.getElementById("gated-content").classList.classList.remove("hidden")
-      document.getElementById(
-        "ipt-access-token"
-      ).innerHTML = await auth0.getTokenSilently()
-      document.getElementById("ipt-user-profile").innerHTML = JSON.stringify(
-        await auth0.getUser()
-      )
-    } else {
-      document.getElementById("gated-content").classList.add("hidden")
-    }*/
   }
