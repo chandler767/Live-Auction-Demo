@@ -198,23 +198,7 @@ class auctionItemControl { // Formats messages and scrolls into view.
                             document.getElementById("countdown-${new_msg.bidding_channel}").innerHTML = "Auction Has Ended";
                             document.getElementById("${new_msg.bidding_channel}-accordionBid").style.visibility = 'hidden';
                             // Get last Bid
-                          /*  pubnub.fetchMessages(
-                            {
-                                channels: ['${new_msg.bidding_channel}'],
-                                count: 1
-                            },
-                            function (status, response) {
-                                if (response.channels[encodeURIComponent('${new_msg.bidding_channel}')] && encodeURIComponent('${new_msg.bidding_channel}') in response.channels) {
-                                    response.channels[encodeURIComponent('${new_msg.bidding_channel}')].forEach((message) => {
-                                        console.log(message.uuid);
-                                        console.log(message.uuid);
-                                        console.log(message.uuid);
-                                        if (message.uuid == pubnub.getUUID()) { // you won the bid!!
-                                            document.getElementById('win-${new_msg.bidding_channel}').style.visibility = 'visible';
-                                        }
-                                    });
-                                }
-                            });*/
+                         
                         }
                     }
                 } else {
@@ -495,5 +479,20 @@ const updateUI = async () => {
         sub = userdetails.sub;
         loadBidding("your-bids");
     }
-  
-}
+   
+    
+   /* document.getElementById("btn-logout").disabled = !isAuthenticated
+    document.getElementById("btn-login").disabled = isAuthenticated
+    // NEW - add logic to show/hide gated content after authentication
+    if (isAuthenticated) {
+      document.getElementById("gated-content").classList.classList.remove("hidden")
+      document.getElementById(
+        "ipt-access-token"
+      ).innerHTML = await auth0.getTokenSilently()
+      document.getElementById("ipt-user-profile").innerHTML = JSON.stringify(
+        await auth0.getUser()
+      )
+    } else {
+      document.getElementById("gated-content").classList.add("hidden")
+    }*/
+  }
