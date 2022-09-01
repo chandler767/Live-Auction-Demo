@@ -198,7 +198,7 @@ class auctionItemControl { // Formats messages and scrolls into view.
                             document.getElementById("countdown-${new_msg.bidding_channel}").innerHTML = "Auction Has Ended";
                             document.getElementById("${new_msg.bidding_channel}-accordionBid").style.visibility = 'hidden';
                             // Get last Bid
-                            pubnub.fetchMessages(
+                          /*  pubnub.fetchMessages(
                             {
                                 channels: ['${new_msg.bidding_channel}'],
                                 count: 1
@@ -214,7 +214,7 @@ class auctionItemControl { // Formats messages and scrolls into view.
                                         }
                                     });
                                 }
-                            });
+                            });*/
                         }
                     }
                 } else {
@@ -495,4 +495,4 @@ const updateUI = async () => {
         sub = userdetails.sub;
         loadBidding("your-bids");
     }
-  }
+  
