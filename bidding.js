@@ -496,3 +496,4 @@ const updateUI = async () => {
         loadBidding("your-bids");
     }
   
+}
