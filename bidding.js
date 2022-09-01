@@ -109,7 +109,7 @@ class auctionItemControl { // Formats messages and scrolls into view.
             new_msg.bidding_channel = "TestItemName"+new Date().getTime()+ 3650000;
         }
         if (new_msg.image == undefined) {
-            new_msg.image = "/images/lamp.png";
+            new_msg.image = "/Live-Auction-Demo/images/lamp.png";
         }
         if (new_msg.shipping == undefined) {
             new_msg.shipping = "Yes";
@@ -384,7 +384,7 @@ function setActive(e) {
         name: document.getElementById('nameInput').value,
         description: document.getElementById('desInput').value,
         //image: document.getElementById('imageInput').value,
-        image: "/images/lamp.png",
+        image: "/Live-Auction-Demo/images/lamp.png",
         collect_details: document.getElementById('contactInput').value,
         shipping: will_ship,
         end_time: set_end_time,
@@ -495,6 +495,4 @@ const updateUI = async () => {
         sub = userdetails.sub;
         loadBidding("your-bids");
     }
-   
-    
   }
